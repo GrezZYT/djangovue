@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from .models import Element, Category, Type
 from .serializer import ElementSerializer, CategorySerializer, TypeSerializer
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all()
@@ -11,6 +12,12 @@ class ElementViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    @action(detail=True, methods=['post'])
+    def elements(self, request, pk=None):
+        queryset = Element.objects.filter(category_id=pk)
+        serializer = ElementSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     '''def list(self, request):
         queryset = Category.objects.all()
