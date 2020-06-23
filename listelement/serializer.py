@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Element, Category, Type
 
 class ElementSerializer(serializers.ModelSerializer):
